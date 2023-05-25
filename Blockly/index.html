@@ -36,19 +36,21 @@
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Default">
-      <block type="mycontract"></block>
+      <block type="myContract"></block>
       <block type="function"></block>
       <block type="modifier"></block>
+      <block type="interface"></block>
+      <!-- <block type="modifier1"></block> -->
+    </category>
+    <category name="Variables">
       <block type="input"></block>
       <block type="output"></block>
       <block type="variableDefinition"></block>
       <block type="variableDeclaration"></block>
-      <block type="interface"></block>
-      <block type="modifier1"></block>
+      <block type="stateVariable"></block>
     </category>
     <category name="InterialLogic">
-      <block type="statemachine"></block>
-      <block type="statevariable"></block>
+      <block type="stateMachine"></block>
       <block type="event"></block>
       <block type="emit"></block>
     </category>
@@ -70,7 +72,7 @@
       <block type="registerlist"></block>
       <block type="contractupdate"></block>
     </category>
-    <category name="Logic" colour="#5b80a5">
+    <!-- <category name="Logic" colour="#5b80a5">
       <block type="controls_if"></block>
       <block type="logic_compare">
         <field name="OP">EQ</field>
@@ -422,12 +424,13 @@
           </shadow>
         </value>
       </block>
-    </category>
+    </category> -->
     <sep></sep>
     <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
     <category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
   </xml>
 
+  <!-- <script src="scripts/utility.js"></script> -->
   <script src="scripts/generatorStub.js"></script>
   <script src="scripts/main.js"></script>
   <!-- <script src="scripts/workspace.js"></script> -->
