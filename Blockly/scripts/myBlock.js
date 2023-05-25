@@ -83,26 +83,11 @@
     }
   };
 
-  Blockly.Blocks['modifier1'] = {
-    init: function() {
-      this.appendDummyInput()
-        .appendField('合约修饰器')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendValueInput("NAME")
-          .setCheck(null)
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(345);
-   this.setTooltip("");
-   this.setHelpUrl("");
-    }
-  };
-
   Blockly.Blocks['modifier'] = {
     init: function() {
       this.appendDummyInput()
         .appendField('修饰器')
-        .appendField(new Blockly.FieldTextInput('...'), 'funcName');
+        .appendField(new Blockly.FieldTextInput('...'), 'modifierName');
       this.appendStatementInput('input')
         .appendField('input')
       this.appendStatementInput("function")
@@ -134,7 +119,7 @@
     }
   };
 
-  Blockly.Blocks['statevariable'] = {
+  Blockly.Blocks['stateVariable'] = {
     init: function() {
       this.appendDummyInput()
         .appendField('变量名');
