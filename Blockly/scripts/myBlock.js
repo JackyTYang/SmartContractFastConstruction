@@ -26,9 +26,9 @@ Blockly.Blocks['myContract'] = {
       this.appendDummyInput()
         .appendField('可见性:')
         .appendField(new Blockly.FieldDropdown([
-            ['internal', 'ITEM1'],
-            ['public', 'ITEM2'],
-            ['external', 'ITEM3']
+            ['internal', 'internal'],
+            ['public', 'public'],
+            ['external', 'external']
         ]), 'visibility');
       this.appendStatementInput('input')
         .appendField('input')
@@ -37,13 +37,49 @@ Blockly.Blocks['myContract'] = {
       this.appendStatementInput("modifier")
         .appendField('modifier')
         .appendField(new Blockly.FieldDropdown([
-          ['pure', 'ITEM1'],
-          ['view', 'ITEM2'],
-          ['payable', 'ITEM3']
+          ['pure', 'pure'],
+          ['view', 'view'],
+          ['payable', 'payable']
       ]), 'defaultModifier')
         .setCheck(null);
       this.appendStatementInput("functionBody")
         .appendField('函数体')
+        .setCheck(null)
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(285);
+   this.setTooltip("");
+   this.setHelpUrl("");
+    }
+  };
+
+  Blockly.Blocks['modifierDefinition'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('函数修饰器')
+        .appendField(new Blockly.FieldTextInput('...'), 'modifierName');
+      this.appendStatementInput('input')
+        .appendField('input');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(285);
+      this.setTooltip("");
+      this.setHelpUrl("");
+    }
+  };
+
+  Blockly.Blocks['modifier'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('修饰器')
+        .appendField(new Blockly.FieldTextInput('...'), 'modifierName');
+      this.appendStatementInput('input')
+        .appendField('input')
+      this.appendStatementInput("beforeFunction")
+        .appendField('函数前修饰区')
+        .setCheck(null)
+      this.appendStatementInput("afterFunction")
+        .appendField('函数后修饰区')
         .setCheck(null)
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
@@ -67,25 +103,6 @@ Blockly.Blocks['myContract'] = {
    this.setHelpUrl("");
     }
   };
-
-  Blockly.Blocks['modifier'] = {
-    init: function() {
-      this.appendDummyInput()
-        .appendField('修饰器')
-        .appendField(new Blockly.FieldTextInput('...'), 'modifierName');
-      this.appendStatementInput('input')
-        .appendField('input')
-      this.appendStatementInput("function")
-        .appendField('修饰区')
-        .setCheck(null)
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(285);
-   this.setTooltip("");
-   this.setHelpUrl("");
-    }
-  };
-
 
 /*-----------------------------------------------创建模式--------------------------------------------------------------------------*/
   
