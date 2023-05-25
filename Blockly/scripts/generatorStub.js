@@ -15,8 +15,11 @@ Blockly.JavaScript['mycontractfactory'] = function(block) {
 Blockly.JavaScript['function'] = function(block) {
   var statements_function = Blockly.JavaScript.statementToCode(block, 'function');
   // TODO: Assemble JavaScript into code variable.
+  var temp = block.getFieldValue('function');
+  var inputType = this.getInputTargetBlock('input').getFieldValue('type');
+  var inputVariable = this.getInputTargetBlock('input').getFieldValue('variable');
   var code = '...;\n';
-  return code;
+  return inputType + " " + inputVariable;
 };
 
 Blockly.JavaScript['contractcomposer'] = function(block) {

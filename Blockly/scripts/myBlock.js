@@ -2,13 +2,13 @@
     init: function() {
       this.appendDummyInput()
       .appendField('智能合约')
-      .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("definitionAndReclaration")
+      .appendField(new Blockly.FieldTextInput('...'), 'contractName');
+      this.appendStatementInput("definitionAndDeclaration")
           .appendField('定义与声明')
           .setCheck(null)
       this.appendStatementInput("functions")
           .appendField('功能区')
-          .setCheck(null)
+          .setCheck('null')
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(230);
@@ -21,8 +21,8 @@
     init: function() {
       this.appendDummyInput()
         .appendField('合约工厂')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("合约")
+        .appendField(new Blockly.FieldTextInput('...'), 'factoryName');
+      this.appendStatementInput("contract")
           .setCheck(null)
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
@@ -35,12 +35,12 @@
   Blockly.Blocks['function'] = {
     init: function() {
       this.appendDummyInput()
-        .appendField('函数')
+        .appendField('function')
         .appendField(new Blockly.FieldTextInput('...'), 'funcName');
       this.appendDummyInput()
         .appendField('可见性:')
         .appendField(new Blockly.FieldDropdown([
-            ['private', 'ITEM1'],
+            ['internal', 'ITEM1'],
             ['public', 'ITEM2'],
             ['external', 'ITEM3']
         ]), 'visibility');
@@ -54,9 +54,9 @@
           ['pure', 'ITEM1'],
           ['view', 'ITEM2'],
           ['payable', 'ITEM3']
-      ]), 'modifier')
+      ]), 'defaultModifier')
         .setCheck(null);
-      this.appendStatementInput("function")
+      this.appendStatementInput("functionBody")
         .appendField('函数体')
         .setCheck(null)
       this.setPreviousStatement(true, null);
