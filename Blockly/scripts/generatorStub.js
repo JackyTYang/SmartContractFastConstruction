@@ -58,7 +58,7 @@ Blockly.JavaScript['stateMachine'] = function(block) {
   code += '\t_;\n}\n\n';
   code += 'function nextStage() internal {\n\
     stage = Stages(uint(stage) + 1);\n\
-}\n';
+}\n\n';
   return code;
 };
 
@@ -68,8 +68,27 @@ Blockly.JavaScript['myContract'] = function(block) {
   console.log(functionBody);
   // TODO: Assemble JavaScript into code variable.
   var code = '';
+  var constructor = "constructor(";
+  var inConstructor = "";
+  var parameterBlock = getBlocksByTypeFromStatementInput(block.getInput("constructor"),"assignment");
+  for(var i = 0; i<parameterBlock.length; i++){
+    console.log(parameterBlock[i].getFieldValue('fromOutside'));
+    if(parameterBlock[i].getFieldValue('fromOutside') == 'TRUE'){//如果需要外部传参构造
+      if(i!=0)
+        constructor += ", ";
+      constructor += parameterBlock[i].getFieldValue('type') + " _" +  parameterBlock[i].getFieldValue('name');
+      inConstructor += "\t" + parameterBlock[i].getFieldValue('name') + " = _" +  parameterBlock[i].getFieldValue('name') + "\n";
+    }
+    else{
+      inConstructor += "\t" + parameterBlock[i].getFieldValue('name') + " = " + parameterBlock[i].getFieldValue('value') + "\n";
+    }
+  }
+  constructor += ') {\n\t';
+  constructor += inConstructor;
+  constructor += "\n}\n";
   code += 'contract ' + this.getFieldValue('contractName') + ' {\n';
   code += definitionAndDeclaration;
+  code += constructor;
   code += functionBody;
   code += '}\n\n';
   return code;
@@ -112,7 +131,6 @@ Blockly.JavaScript['function'] = function(block) {
     modifierCode += " ";
   }
 
-
   code += 'function ' + funcName + '(';
   //input
   for(var i = 0; i<inputList.length; i++){
@@ -139,9 +157,48 @@ Blockly.JavaScript['function'] = function(block) {
   
   code += ' {\n';
   code += Blockly.JavaScript.statementToCode(block, 'functionBody');
-  code += '}';
+  code += '}\n\n';
   return code;
 };
+
+Blockly.JavaScript['modifier'] = function(block) {
+  var beforeFunction = Blockly.JavaScript.statementToCode(block,'beforeFunction');
+  var afterFunction = Blockly.JavaScript.statementToCode(block,'afterFunction');
+  var code = "";
+  code += block.getFieldValue("modifierName");
+  var modifierInputBlock = getBlocksByTypeFromStatementInput(block.getInput("input"),"input");
+  if(modifierInputBlock.length!=0){
+    code += "(";
+    for(var j = 0; j<modifierInputBlock.length; j++){
+      var type = modifierInputBlock[j].getFieldValue('type');
+      var variable = modifierInputBlock[j].getFieldValue('variable');
+      code += type + " " + variable;
+      console.log("type:" + type);
+      if(j!=modifierInputBlock.length-1)
+        code += ', ';
+    }
+    code += ")";
+  }
+  code += "{\n";
+  code += beforeFunction;
+  code += "_;\n"
+  code += afterFunction;
+  code += "}\n\n";
+  return code;
+}
+
+
+Blockly.JavaScript['variableDefinition'] = function(block) {
+  var type = block.getFieldValue("type");
+  var variable = block.getFieldValue("variable");
+  return type + " " + variable + ";\n";
+}
+
+Blockly.JavaScript['variableDeclaration'] = function(block) {
+  var type = block.getFieldValue("type");
+  var variable = block.getFieldValue("variable");
+  return type + " " + variable + ";\n";
+}
   
 Blockly.JavaScript['mycontractfactory'] = function(block) {
     var statements___ = Blockly.JavaScript.statementToCode(block, '合约');
@@ -186,13 +243,6 @@ Blockly.JavaScript['askforoutsidedata'] = function(block) {
 };
 
 Blockly.JavaScript['proxycontract'] = function(block) {
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...;\n';
-  return code;
-};
-
-Blockly.JavaScript['registercontract'] = function(block) {
   var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   // TODO: Assemble JavaScript into code variable.
   var code = '...;\n';

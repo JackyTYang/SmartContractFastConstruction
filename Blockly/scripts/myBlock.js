@@ -7,6 +7,9 @@ Blockly.Blocks['myContract'] = {
       this.appendStatementInput("definitionAndDeclaration")
           .appendField('定义与声明')
           .setCheck(null)
+      this.appendStatementInput('constructor')
+          .appendField('构造器')
+          .setCheck(null)
       this.appendStatementInput("functions")
           .appendField('功能区')
           .setCheck('null')
@@ -217,6 +220,30 @@ Blockly.Blocks['myContract'] = {
       this.appendDummyInput()
         .appendField('name')
         .appendField(new Blockly.FieldTextInput('...'), 'type');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(330);
+   this.setTooltip("");
+   this.setHelpUrl("");
+    }
+  };
+
+  Blockly.Blocks['assignment'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('赋值');
+      this.appendDummyInput()
+        .appendField('类型')
+        .appendField(new Blockly.FieldTextInput('...'), 'type');
+      this.appendDummyInput()
+        .appendField('名称')
+        .appendField(new Blockly.FieldTextInput('...'), 'name');
+      this.appendDummyInput()
+        .appendField('外部构造？')
+        .appendField(new Blockly.FieldCheckbox(true), 'fromOutside');
+      this.appendDummyInput()
+        .appendField('值')
+        .appendField(new Blockly.FieldTextInput('...'), 'value');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(330);
