@@ -69,7 +69,7 @@ Blockly.JavaScript['myContract'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
   var code = '';
   var constructor = "constructor(";
-  var inConstructor = "";
+  var inConstructor = "";  
   var parameterBlock = getBlocksByTypeFromStatementInput(block.getInput("constructor"),"assignment");
   for(var i = 0; i<parameterBlock.length; i++){
     console.log(parameterBlock[i].getFieldValue('fromOutside'));
@@ -188,6 +188,51 @@ Blockly.JavaScript['modifier'] = function(block) {
 }
 
 
+Blockly.JavaScript['mycontractfactory'] = function(block) {
+  var myContract = Blockly.JavaScript.statementToCode(block, 'myContract');
+  var contractBlock = getBlocksByTypeFromStatementInput(block.getInput("contract"),"myContract");
+  var code = "contract " + contractBlock[0].getFieldValue("contractName") + "Factory {\n";
+  code += "\taddress[] " + contractBlock[0].getFieldValue("contractName") + "s;\n\n";
+  code += "\tfunction create" + contractBlock[0].getFieldValue("contractName") + "(";
+  var name = contractBlock[0].getFieldValue("contractName");
+  var constructorBlock = getBlocksByTypeFromStatementInput(contractBlock[0].getInput("constructor"),"assignment");
+  var constructorCode = "";
+  var innerCode = "";
+  for(var i = 0; i<constructorBlock.length; i++){
+    var type = constructorBlock[i].getFieldValue("type");
+    var _name = constructorBlock[i].getFieldValue("name");
+    if(i!=0) innerCode+=", ";
+    innerCode += "_" + _name;
+    if(i!=0) constructorCode += ", ";
+    constructorCode += type + " memory _" + _name; 
+  }
+  code += constructorCode + ") external {\n";
+  code += "\t\t" + name + " my" + name + " = new " + name + "(" + innerCode + ");\n" + "\t\t" + name + "s.push(address(" + "my" + name + "));\n\t}\n\n";
+  code += "\tfunction getAll" + name +"() external view returns (address[] memory) {\n\t\
+    return " + name + "s;\n\t}\n";
+  code += "}\n";
+  
+  return code;
+};
+
+Blockly.JavaScript['dataContract'] = function(block) {
+  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+  var storageBlock = getBlocksByTypeFromStatementInput(block.getInput("data"),"variableDefinition");
+  var code = "contract DataStorage {\n";
+  for(var i = 0; i<storageBlock.length; i++){
+    var type = storageBlock[i].getFieldValue("type");
+    var name = storageBlock[i].getFieldValue("variable");
+    code += "\tmapping(bytes32 => " + type +") private " + name + ";\n\n";
+    code += "\tfunction get" + name +"Value(byte32 key) public view returns (" + type +") {\n";
+    code += '\t\treturn ' + name + "[key];\n\t}\n\n";
+    code += "\tfunction set" + name +"Value(byte32 key, " + type + " value) public {\n";
+    code += '\t\t' + name +"[key] = value;\n\t}\n\n";
+  }
+  code += '}\n\n';
+  return code;
+};
+
+
 Blockly.JavaScript['variableDefinition'] = function(block) {
   var type = block.getFieldValue("type");
   var variable = block.getFieldValue("variable");
@@ -199,23 +244,10 @@ Blockly.JavaScript['variableDeclaration'] = function(block) {
   var variable = block.getFieldValue("variable");
   return type + " " + variable + ";\n";
 }
-  
-Blockly.JavaScript['mycontractfactory'] = function(block) {
-    var statements___ = Blockly.JavaScript.statementToCode(block, '合约');
-    // TODO: Assemble JavaScript into code variable.
-    var code = 'contract myContractFactory{ contract1 myContract1;\n};\n';
-    return code;
-};
+
 
 Blockly.JavaScript['contractcomposer'] = function(block) {
   var statements___ = Blockly.JavaScript.statementToCode(block, '合约');
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...;\n';
-  return code;
-};
-
-Blockly.JavaScript['DataContract'] = function(block) {
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   // TODO: Assemble JavaScript into code variable.
   var code = '...;\n';
   return code;

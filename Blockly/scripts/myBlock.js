@@ -348,12 +348,12 @@ Blockly.Blocks['myContract'] = {
 
   /*-----------------------------------------------合约维护--------------------------------------------------------------------------*/
 
-  Blockly.Blocks['datacontract'] = {
+  Blockly.Blocks['dataContract'] = {
     init: function() {
       this.appendDummyInput()
         .appendField('数据合约')
         .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("NAME")
+      this.appendStatementInput("data")
           .setCheck(null)
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
