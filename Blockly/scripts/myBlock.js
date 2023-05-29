@@ -27,6 +27,21 @@ Blockly.Blocks['myContract'] = {
     }
   };
 
+  Blockly.Blocks['interface'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('接口')
+        .appendField(new Blockly.FieldTextInput('...'), 'interfaceName');
+      this.appendStatementInput("functions")
+          .setCheck(null)
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(300);
+   this.setTooltip("");
+   this.setHelpUrl("");
+    }
+  };
+
   Blockly.Blocks['function'] = {
     init: function() {
       this.appendDummyInput()
@@ -93,21 +108,6 @@ Blockly.Blocks['myContract'] = {
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(285);
-   this.setTooltip("");
-   this.setHelpUrl("");
-    }
-  };
-
-  Blockly.Blocks['interface'] = {
-    init: function() {
-      this.appendDummyInput()
-        .appendField('接口')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("NAME")
-          .setCheck(null)
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(300);
    this.setTooltip("");
    this.setHelpUrl("");
     }
@@ -399,12 +399,12 @@ Blockly.Blocks['myContract'] = {
     }
   };
 
-  Blockly.Blocks['proxycontract'] = {
+  Blockly.Blocks['proxyContract'] = {
     init: function() {
       this.appendDummyInput()
         .appendField('代理合约')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("NAME")
+        .appendField(new Blockly.FieldTextInput('...'), 'contractName');
+      this.appendStatementInput("contract")
           .setCheck(null)
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);

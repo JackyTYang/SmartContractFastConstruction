@@ -131,6 +131,40 @@ Blockly.JavaScript['myContract'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['proxyContract'] = function(block) {
+  var code = '';
+  var declaration = "";
+  var constructor = "constructor(";
+  var innerConstructor = "";
+  var proxyName = block.getFieldValue("contractName");
+  var contractBlock = getBlocksByTypeFromStatementInput(block.getInput("contract"),"myContract");
+  code += "contract " + proxyName + " {\n";
+  var interfaceNameList = [];
+  for(var i = 0; i<contractBlock.length; i++){//处理每一个智能合约
+    var start = true;
+    var contractName = contractBlock[i].getFieldValue("contractName");
+    var interfaceBlock = getBlocksByTypeFromStatementInput(contractBlock[i].getInput("functions"),"interface");
+    for(var j = 0; j<interfaceBlock.length; j++){
+      var interfaceName = interfaceBlock[j].getFieldValue("interfaceName");
+      if(!interfaceNameList.includes(interfaceName)){//避免重复声明
+        interfaceNameList.push(interfaceName);
+        declaration += '\t' + interfaceName + " my" + contractName + ";\n\n";
+        if(start == false)
+          constructor += ", ";
+        else
+          start = true;
+        constructor += interfaceName + " _" + interfaceName;
+        innerConstructor += '\t\t' + interfaceName + " my" + contractName + " = " + interfaceName + "(_" + interfaceName + ");\n";
+      }
+    }
+  }
+  constructor += '){\n' + innerConstructor + '\t}';
+  code += declaration;
+  code += '\t' + constructor;
+  code += "\n" + '}\n\n';
+  return code;
+};
+
 Blockly.JavaScript['registerContract'] = function(block) {
   var code = '';
   code += "contract " + block.getFieldValue("contractName");
@@ -332,13 +366,6 @@ Blockly.JavaScript['callbackfunctionoforacle'] = function(block) {
 };
 
 Blockly.JavaScript['askforoutsidedata'] = function(block) {
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...;\n';
-  return code;
-};
-
-Blockly.JavaScript['proxycontract'] = function(block) {
   var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   // TODO: Assemble JavaScript into code variable.
   var code = '...;\n';
