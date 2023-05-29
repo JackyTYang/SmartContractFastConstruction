@@ -25,10 +25,14 @@
   <div class="demo" style="float:left">
     <p>智能合约可视化构建方法</p>
     <div id="blocklyDiv" style="height: 800px; width: 850px;"></div>
+    <input type="file" id="file-input" accept=".xml">
+    <button id="load-button">Load XML</button>
+    <button id="download-button">Save XML</button>
   </div>
   <div style="float:right">
     <input type="button" value="生成代码" onclick="updateCode(event);"> 
-    <h1 id="codeGenerated"></h1>
+    <code id="codeGenerated"></code>
+    <button id="downloadCode">下载代码</button>
   </div>
 
 
@@ -68,7 +72,7 @@
     </category>
     <category name="Maintenance">
       <block type="satellitecontract"></block>
-      <block type="satellitecontractframe"></block>
+      <block type="satelliteContractFrame"></block>
       <block type="proxycontract"></block>
       <block type="registercontract"></block>
       <block type="registerlist"></block>
@@ -432,9 +436,11 @@
     <category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
   </xml>
 
-  <!-- <script src="scripts/utility.js"></script> -->
   <script src="scripts/generatorStub.js"></script>
   <script src="scripts/main.js"></script>
+  <script src="scripts/loadXML.js"></script>
+  <script src="scripts/downloadXML.js"></script>
+  <script src="scripts/downloadCode.js"></script>
   <!-- <script src="scripts/workspace.js"></script> -->
 
 </body>

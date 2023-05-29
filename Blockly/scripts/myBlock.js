@@ -13,6 +13,12 @@ Blockly.Blocks['myContract'] = {
       this.appendStatementInput("functions")
           .appendField('功能区')
           .setCheck('null')
+      this.appendStatementInput("dataStorage")
+          .appendField('数据存储')
+          .setCheck(null)
+      this.appendStatementInput("content")
+          .appendField('内部逻辑')
+          .setCheck(null)
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(230);
@@ -352,7 +358,7 @@ Blockly.Blocks['myContract'] = {
     init: function() {
       this.appendDummyInput()
         .appendField('数据合约')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
+        .appendField(new Blockly.FieldTextInput('...'), 'contractName');
       this.appendStatementInput("data")
           .setCheck(null)
       this.setPreviousStatement(true, null);
@@ -378,12 +384,12 @@ Blockly.Blocks['myContract'] = {
     }
   };
   
-  Blockly.Blocks['satellitecontractframe'] = {
+  Blockly.Blocks['satelliteContractFrame'] = {//里面的智能合约默认为卫星合约，只有一个函数，且自动在函数内声明
     init: function() {
       this.appendDummyInput()
         .appendField('卫星合约框架')
         .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("NAME")
+      this.appendStatementInput("contract")
           .setCheck(null);
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);

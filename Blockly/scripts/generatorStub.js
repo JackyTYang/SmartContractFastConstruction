@@ -64,32 +64,55 @@ Blockly.JavaScript['stateMachine'] = function(block) {
 
 Blockly.JavaScript['myContract'] = function(block) {
   var definitionAndDeclaration = Blockly.JavaScript.statementToCode(block, 'definitionAndDeclaration');
-  var functionBody = Blockly.JavaScript.statementToCode(block, 'functions');
-  console.log(functionBody);
-  // TODO: Assemble JavaScript into code variable.
+  var content = Blockly.JavaScript.statementToCode(block, 'content');
+  functionBody = "";
   var code = '';
   var constructor = "constructor(";
   var inConstructor = "";  
   var parameterBlock = getBlocksByTypeFromStatementInput(block.getInput("constructor"),"assignment");
+  var dataBlock = getBlocksByTypeFromStatementInput(block.getInput("dataStorage"),"dataContract");
+  var satelliteFrame = getBlocksByTypeFromStatementInput(block.getInput("functions"),"satelliteContractFrame");
+  var satelliteBlock = getBlocksByTypeFromStatementInput(satelliteFrame[0].getInput("contract"),"myContract");//每一个都是合约
+
   for(var i = 0; i<parameterBlock.length; i++){
     console.log(parameterBlock[i].getFieldValue('fromOutside'));
     if(parameterBlock[i].getFieldValue('fromOutside') == 'TRUE'){//如果需要外部传参构造
       if(i!=0)
         constructor += ", ";
       constructor += parameterBlock[i].getFieldValue('type') + " _" +  parameterBlock[i].getFieldValue('name');
-      inConstructor += "\t" + parameterBlock[i].getFieldValue('name') + " = _" +  parameterBlock[i].getFieldValue('name') + "\n";
+      inConstructor += "\t\t" + parameterBlock[i].getFieldValue('name') + " = _" +  parameterBlock[i].getFieldValue('name') + "\n";
     }
     else{
-      inConstructor += "\t" + parameterBlock[i].getFieldValue('name') + " = " + parameterBlock[i].getFieldValue('value') + "\n";
+      inConstructor += "\t\t" + parameterBlock[i].getFieldValue('name') + " = " + parameterBlock[i].getFieldValue('value') + "\n";
     }
   }
-  constructor += ') {\n\t';
+
+  for(var i = 0; i<dataBlock.length; i++){
+    definitionAndDeclaration += "\t" + dataBlock[i].getFieldValue("contractName") + " public my" + dataBlock[i].getFieldValue("contractName") + ";\n";
+    if(parameterBlock.length!=0)
+      constructor += ", ";  
+    constructor += dataBlock[i].getFieldValue('contractName') + " _" + dataBlock[i].getFieldValue("contractName");
+    inConstructor += "\t\t" +  "my" + dataBlock[i].getFieldValue('contractName') + " = _" + dataBlock[i].getFieldValue('contractName') + ";\n";
+  }
+
+  for(var i = 0; i<satelliteBlock.length; i++){
+    definitionAndDeclaration += "\t" + satelliteBlock[i].getFieldValue("contractName") + " public my" + satelliteBlock[i].getFieldValue("contractName") + ";\n";
+    if(parameterBlock.length!=0)
+      constructor += ", ";
+    constructor += satelliteBlock[i].getFieldValue('contractName') + " _" + satelliteBlock[i].getFieldValue("contractName");
+    inConstructor += "\t\t" +  "my" + satelliteBlock[i].getFieldValue('contractName') + " = _" + satelliteBlock[i].getFieldValue('contractName') + ";\n";
+    functionBody += "\tfunction update" + satelliteBlock[i].getFieldValue('contractName') + "(" +satelliteBlock[i].getFieldValue('contractName') + " _" + satelliteBlock[i].getFieldValue('contractName') + ") public{\n";
+    functionBody += "\t\t" + satelliteBlock[i].getFieldValue('contractName') + " = " + "_" + satelliteBlock[i].getFieldValue('contractName') + ";\n\t}\n";
+  }
+
+  constructor += ') {\n';
   constructor += inConstructor;
-  constructor += "\n}\n";
+  constructor += "\t}\n";
   code += 'contract ' + this.getFieldValue('contractName') + ' {\n';
   code += definitionAndDeclaration;
-  code += constructor;
+  code += "\t" + constructor;
   code += functionBody;
+  code += content;
   code += '}\n\n';
   return code;
 };
@@ -218,7 +241,7 @@ Blockly.JavaScript['mycontractfactory'] = function(block) {
 Blockly.JavaScript['dataContract'] = function(block) {
   var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   var storageBlock = getBlocksByTypeFromStatementInput(block.getInput("data"),"variableDefinition");
-  var code = "contract DataStorage {\n";
+  var code = "contract " + block.getFieldValue("contractName") + " {\n";
   for(var i = 0; i<storageBlock.length; i++){
     var type = storageBlock[i].getFieldValue("type");
     var name = storageBlock[i].getFieldValue("variable");

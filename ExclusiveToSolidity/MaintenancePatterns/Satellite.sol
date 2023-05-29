@@ -8,12 +8,14 @@ contract contract1{
 }
 
 contract UseSatellite{
-    address satelliteAddress;
+    contract1 myContract1;
 
-    contract1 c = contract1(satelliteAddress);
+    constructor(contract1 _contract1){
+        myContract1 = _contract1;
+    }
 
-    function updateSatelliteAddress(address _address) public{
-        satelliteAddress = _address;
+    function updateSatelliteAddress(contract1 __contract1) public{
+        myContract1 = __contract1;
     }
 }
 
