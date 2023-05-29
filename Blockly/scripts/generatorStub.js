@@ -72,7 +72,11 @@ Blockly.JavaScript['myContract'] = function(block) {
   var parameterBlock = getBlocksByTypeFromStatementInput(block.getInput("constructor"),"assignment");
   var dataBlock = getBlocksByTypeFromStatementInput(block.getInput("dataStorage"),"dataContract");
   var satelliteFrame = getBlocksByTypeFromStatementInput(block.getInput("functions"),"satelliteContractFrame");
-  var satelliteBlock = getBlocksByTypeFromStatementInput(satelliteFrame[0].getInput("contract"),"myContract");//每一个都是合约
+  var satelliteBlock = [];
+  if(satelliteFrame.length!=0)
+    satelliteBlock = getBlocksByTypeFromStatementInput(satelliteFrame[0].getInput("contract"),"myContract");//每一个都是合约
+  
+  var registercontract = getBlocksByTypeFromStatementInput(block.getInput("functions"),"registerContract");
 
   for(var i = 0; i<parameterBlock.length; i++){
     console.log(parameterBlock[i].getFieldValue('fromOutside'));
@@ -105,6 +109,16 @@ Blockly.JavaScript['myContract'] = function(block) {
     functionBody += "\t\t" + satelliteBlock[i].getFieldValue('contractName') + " = " + "_" + satelliteBlock[i].getFieldValue('contractName') + ";\n\t}\n";
   }
 
+  if(registercontract.length!=0){
+    var name = registercontract[0].getFieldValue("contractName");
+    definitionAndDeclaration += '\t' + name + " my" + name + ";\n";
+    if(parameterBlock.length!=0)
+      constructor += ", ";
+    constructor += name + " _" + name;
+    inConstructor += "\t\t" + 'my' + name + " = _" + name + ";\n";
+    inConstructor += "\t\t" + 'my' + name + ".changeBackend(address(this));\n";
+  }
+
   constructor += ') {\n';
   constructor += inConstructor;
   constructor += "\t}\n";
@@ -114,6 +128,33 @@ Blockly.JavaScript['myContract'] = function(block) {
   code += functionBody;
   code += content;
   code += '}\n\n';
+  return code;
+};
+
+Blockly.JavaScript['registerContract'] = function(block) {
+  var code = '';
+  code += "contract " + block.getFieldValue("contractName");
+  code += `{
+    address private backendContract;
+    address[] private previousBackends;
+
+    function changeBackend(address newBackend) public onlyOwner returns (bool) {
+        if (newBackend != backendContract) {
+            previousBackends.push(backendContract);
+            backendContract = newBackend;
+            return true;
+        }
+        return false;
+    }
+    
+    function getBackend() public view returns (address) {
+        return backendContract;
+    }
+
+    function getPreviousBackends() public view returns (address[] memory) {
+        return previousBackends;
+    }
+}`;
   return code;
 };
 
@@ -298,13 +339,6 @@ Blockly.JavaScript['askforoutsidedata'] = function(block) {
 };
 
 Blockly.JavaScript['proxycontract'] = function(block) {
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...;\n';
-  return code;
-};
-
-Blockly.JavaScript['registercontract'] = function(block) {
   var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   // TODO: Assemble JavaScript into code variable.
   var code = '...;\n';

@@ -414,13 +414,11 @@ Blockly.Blocks['myContract'] = {
     }
   };
 
-  Blockly.Blocks['registercontract'] = {
+  Blockly.Blocks['registerContract'] = {
     init: function() {
       this.appendDummyInput()
-        .appendField('注册合约')
-        .appendField(new Blockly.FieldTextInput('...'), 'FIELDNAME');
-      this.appendStatementInput("NAME")
-          .setCheck(null)
+        .appendField('注册器合约')
+        .appendField(new Blockly.FieldTextInput('...'), 'contractName');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(230);
